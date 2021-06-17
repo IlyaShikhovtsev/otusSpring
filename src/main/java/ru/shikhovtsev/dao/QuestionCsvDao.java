@@ -1,5 +1,7 @@
 package ru.shikhovtsev.dao;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 import ru.shikhovtsev.domain.Question;
 import ru.shikhovtsev.exception.QuestionDaoException;
 
@@ -11,10 +13,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Repository
 public class QuestionCsvDao implements QuestionDao {
     private final List<Question> questions;
 
-    public QuestionCsvDao(String filename) {
+    public QuestionCsvDao(@Value("${filename}") String filename) {
         Objects.requireNonNull(filename);
 
         this.questions = loadFromCsv(filename);

@@ -2,18 +2,15 @@ package ru.shikhovtsev.service;
 
 import ru.shikhovtsev.exception.StreamInputOutputServiceException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 
 public class ConsoleService implements StreamInputOutputService {
     private final PrintStream outputStream;
     private final BufferedReader reader;
 
-    public ConsoleService() {
-        this.outputStream = System.out;
-        this.reader = new BufferedReader(new InputStreamReader(System.in));
+    public ConsoleService(PrintStream outputStream, InputStream inputStream) {
+        this.outputStream = outputStream;
+        this.reader = new BufferedReader(new InputStreamReader(inputStream));
     }
 
     @Override

@@ -1,30 +1,34 @@
 package ru.shikhovtsev.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.stereotype.Service;
 import ru.shikhovtsev.domain.Question;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Service
 public class KnowledgeServiceImpl implements KnowledgeService {
+    private final MessageSourceAccessor messageSourceAccessor;
     private final ConsoleService consoleService;
     private final QuestionService questionService;
 
     @Override
     public void testStudent() {
-        consoleService.println("Hello, what's your first name?");
+        consoleService.println(messageSourceAccessor.getMessage("hello"));
         String firstName = consoleService.readLine();
-        consoleService.println("last name?");
+        consoleService.println(messageSourceAccessor.getMessage("lastname"));
         String lastName = consoleService.readLine();
 
         List<Question> questions = questionService.getQuestions();
         int result = askQuestions(questions);
-        consoleService.println(String.format("%s %s, your result is %d", firstName, lastName, result));
+        consoleService.println(messageSourceAccessor.getMessage("result", new Object[]{firstName, lastName, result}));
     }
 
     private int askQuestions(List<Question> questions) {
         if (questions.isEmpty()) {
-            consoleService.println("You are lucky! There are no questions for you!");
+            consoleService.println(messageSourceAccessor.getMessage("lucky"));
             return -1;
         }
 
