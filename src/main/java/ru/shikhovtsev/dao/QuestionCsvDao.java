@@ -1,7 +1,7 @@
 package ru.shikhovtsev.dao;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import ru.shikhovtsev.config.YamlProps;
 import ru.shikhovtsev.domain.Question;
 import ru.shikhovtsev.exception.QuestionDaoException;
 
@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class QuestionCsvDao implements QuestionDao {
     private final List<Question> questions;
 
-    public QuestionCsvDao(@Value("${filename}") String filename) {
-        Objects.requireNonNull(filename);
+    public QuestionCsvDao(YamlProps props) {
+        String filename = Objects.requireNonNull(props.getFilename());
 
         this.questions = loadFromCsv(filename);
     }

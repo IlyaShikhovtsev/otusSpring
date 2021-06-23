@@ -1,17 +1,21 @@
 package ru.shikhovtsev;
 
-import org.springframework.context.annotation.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import ru.shikhovtsev.config.YamlProps;
 import ru.shikhovtsev.service.ConsoleService;
 import ru.shikhovtsev.service.KnowledgeService;
 
-@PropertySource("/application.properties")
-@ComponentScan
-@Configuration
+@SpringBootApplication
+@EnableConfigurationProperties(YamlProps.class)
 public class Main {
     public static void main(String[] args) {
-        var context = new AnnotationConfigApplicationContext(Main.class);
+        var context = SpringApplication.run(Main.class);
+
         var knowledgeService = context.getBean(KnowledgeService.class);
         knowledgeService.testStudent();
     }
@@ -22,11 +26,7 @@ public class Main {
     }
 
     @Bean
-    public MessageSourceAccessor messageSourceAccessor() {
-        var messageSource = new ReloadableResourceBundleMessageSource();
-
-        messageSource.setBasename("classpath:messages");
-        messageSource.setDefaultEncoding("UTF-8");
+    public MessageSourceAccessor messageSourceAccessor(MessageSource messageSource) {
         return new MessageSourceAccessor(messageSource);
     }
 }

@@ -2,6 +2,7 @@ package ru.shikhovtsev.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.shikhovtsev.config.YamlProps;
 import ru.shikhovtsev.domain.Question;
 import ru.shikhovtsev.exception.QuestionDaoException;
 
@@ -13,7 +14,9 @@ class QuestionCsvDaoTest {
 
     @Test
     void simple() {
-        var questionDao = new QuestionCsvDao("questions.csv");
+        var props = new YamlProps();
+        props.setFilename("questions.csv");
+        var questionDao = new QuestionCsvDao(props);
         List<Question> questions = questionDao.getQuestions();
         assertEquals(5, questions.size());
         assertEquals(new Question("1?", "yes"), questions.get(0));
@@ -26,12 +29,16 @@ class QuestionCsvDaoTest {
     @Test
     @DisplayName("file with questions is not exist")
     void fileNotExist() {
-        assertThrows(QuestionDaoException.class, () -> new QuestionCsvDao("not-existing-file"));
+        var props = new YamlProps();
+        props.setFilename("not-existing-file");
+        assertThrows(QuestionDaoException.class, () -> new QuestionCsvDao(props));
     }
 
     @Test
     @DisplayName("file with questions is empty")
     void emptyFile() {
-        assertTrue(new QuestionCsvDao("empty.csv").getQuestions().isEmpty());
+        var props = new YamlProps();
+        props.setFilename("empty.csv");
+        assertTrue(new QuestionCsvDao(props).getQuestions().isEmpty());
     }
 }
